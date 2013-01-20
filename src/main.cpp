@@ -17,6 +17,11 @@
 
 #include <QtPlugin>
 #include <QtDeclarative>
+#include <IrcSession>
+#include <IrcCommand>
+#include <IrcMessage>
+#include <IrcSender>
+#include <Irc>
 #include "messageformatter.h"
 #include "messagehandler.h"
 #include "commandparser.h"
@@ -25,7 +30,6 @@
 #include "sessionitem.h"
 #include "session.h"
 #include "settings.h"
-#include <irc.h>
 
 #ifdef COMMUNI_STATIC_ICU_PLUGIN
     Q_IMPORT_PLUGIN(icuplugin)
@@ -37,6 +41,32 @@
 
 #define STRINGIFY(x) XSTRINGIFY(x)
 #define XSTRINGIFY(x) #x
+
+class DeclarativeIrcSender : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit DeclarativeIrcSender(QObject* parent = 0) : QObject(parent) { }
+
+    Q_INVOKABLE static QString name(const IrcSender& sender) {
+        return sender.name();
+    }
+
+    Q_INVOKABLE static QString user(const IrcSender& sender) {
+        return sender.user();
+    }
+
+    Q_INVOKABLE static QString host(const IrcSender& sender) {
+        return sender.host();
+    }
+};
+
+QML_DECLARE_TYPE(Irc)
+QML_DECLARE_TYPE(IrcCommand)
+QML_DECLARE_TYPE(IrcMessage)
+QML_DECLARE_TYPE(IrcSession)
+QML_DECLARE_TYPE(DeclarativeIrcSender)
 
 Q_DECL_EXPORT int main(int argc, char* argv[])
 {
@@ -59,9 +89,14 @@ Q_DECL_EXPORT int main(int argc, char* argv[])
     QCoreApplication::addLibraryPath(STRINGIFY(COMMUNI_PLUGIN_PATH));
 #endif
 
+    qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
+    qmlRegisterType<IrcCommand>("Communi", 1, 0, "IrcCommand");
+    qmlRegisterType<IrcMessage>("Communi", 1, 0, "IrcMessage");
+    qmlRegisterUncreatableType<Irc>("Communi", 1, 0, "Irc", "");
     qmlRegisterType<MessageFormatter>("Communi", 1, 0, "MessageFormatter");
     qmlRegisterType<MessageHandler>("Communi", 1, 0, "MessageHandler");
 
+    viewer->rootContext()->setContextProperty("IrcSender", new DeclarativeIrcSender(viewer->rootContext()));
     viewer->rootContext()->setContextProperty("Settings", Settings::instance());
 
     QScopedPointer<CommandParser> parser(new CommandParser(viewer->rootContext()));
@@ -108,3 +143,5 @@ Q_DECL_EXPORT int main(int argc, char* argv[])
 
     return app->exec();
 }
+
+#include "main.moc"
