@@ -12,16 +12,6 @@ CONFIG += ordered
     message(Plugins disabled)
 }
 
-!no_tests {
-    contains(MEEGO_EDITION,harmattan) {
-        message(Tests not supported on Meego Harmattan)
-    } else {
-        SUBDIRS += tests
-    }
-} else {
-    message(Tests disabled)
-}
-
 !no_examples {
     SUBDIRS += examples
 } else {
