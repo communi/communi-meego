@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2008-2012 J-P Nurmi <jpnurmi@gmail.com>
+* Copyright (C) 2008-2013 J-P Nurmi <jpnurmi@gmail.com>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
 
 #include "messageformatter.h"
 #include "usermodel.h"
+#include <irctextformat.h>
 #include <ircpalette.h>
 #include <ircsender.h>
 #include <ircutil.h>
@@ -22,6 +23,8 @@
 #include <QTime>
 #include <QColor>
 #include <QTextBoundaryFinder>
+
+static IrcTextFormat IRC_TEXT_FORMAT;
 
 MessageFormatter::MessageFormatter(QObject* parent) : QObject(parent)
 {
@@ -33,14 +36,16 @@ MessageFormatter::MessageFormatter(QObject* parent) : QObject(parent)
     static bool init = false;
     if (!init) {
         init = true;
+        IrcPalette palette;
         QStringList colorNames = QStringList()
                 << "navy" << "green" << "red" << "maroon" << "purple" << "olive"
                 << "yellow" << "lime" << "teal" << "aqua" << "royalblue" << "fuchsia";
         for (int i = IrcPalette::Blue; i <= IrcPalette::Pink; ++i) {
             QColor color(colorNames.takeFirst());
-            color.setHsl(color.hue(), 100, 64);
-            IrcPalette::setColorName(i, color.name());
+            color.setHsl(color.hue(), 100, 82);
+            palette.setColorName(i, color.name());
         }
+        IRC_TEXT_FORMAT.setPalette(palette);
     }
 }
 
@@ -272,9 +277,10 @@ QString MessageFormatter::formatNoticeMessage(IrcNoticeMessage* message) const
             return tr("! %1 version is %2").arg(formatSender(message->sender()), QStringList(params.mid(1)).join(" "));
     }
 
-    foreach(const QString & hilite, d.highlights)
-    if (message->message().contains(hilite))
-        d.highlight = true;
+    foreach (const QString& hilite, d.highlights) {
+        if (message->message().contains(hilite))
+            d.highlight = true;
+    }
     const QString sender = formatSender(message->sender());
     const QString msg = formatHtml(message->message());
     return tr("[%1] %2").arg(sender, msg);
@@ -357,9 +363,7 @@ QString MessageFormatter::formatNumericMessage(IrcNumericMessage* message) const
             if (d.receivedCodes.contains(Irc::RPL_ENDOFNAMES)) {
                 int count = message->parameters().count();
                 QString channel = message->parameters().value(count - 2);
-                QStringList names;
-                foreach(const QString & name, message->parameters().value(count - 1).split(" ", QString::SkipEmptyParts))
-                names += IrcSender(name).name();
+                QStringList names = message->parameters().value(count - 1).split(" ", QString::SkipEmptyParts);
                 return tr("! %1 users: %2").arg(channel).arg(names.join(" "));
             }
             return QString();
@@ -390,9 +394,10 @@ QString MessageFormatter::formatPongMessage(IrcPongMessage* message) const
 
 QString MessageFormatter::formatPrivateMessage(IrcPrivateMessage* message) const
 {
-    foreach(const QString & hilite, d.highlights)
-    if (message->message().contains(hilite))
-        d.highlight = true;
+    foreach (const QString& hilite, d.highlights) {
+        if (message->message().contains(hilite))
+            d.highlight = true;
+    }
     const QString sender = formatSender(message->sender());
     const QString msg = formatHtml(message->message());
     if (message->isAction())
@@ -469,23 +474,31 @@ QString MessageFormatter::formatIdleTime(int secs)
     return idle.join(" ");
 }
 
+#if QT_VERSION >= 0x050000
+#   define BOUNDARY_REASON_START QTextBoundaryFinder::StartOfItem
+#   define BOUNDARY_REASON_END   QTextBoundaryFinder::EndOfItem
+#else
+#   define BOUNDARY_REASON_START QTextBoundaryFinder::StartWord
+#   define BOUNDARY_REASON_END   QTextBoundaryFinder::EndWord
+#endif
+
 QString MessageFormatter::formatHtml(const QString& message) const
 {
-    QString msg = IrcUtil::messageToHtml(message);
+    QString msg = IRC_TEXT_FORMAT.messageToHtml(message);
     if (d.userModel) {
-        foreach(const QString & user, d.userModel->users()) {
+        foreach (const QString& user, d.userModel->users()) {
             int pos = 0;
             while ((pos = msg.indexOf(user, pos)) != -1) {
                 QTextBoundaryFinder finder(QTextBoundaryFinder::Word, msg);
 
                 finder.setPosition(pos);
-                if (!finder.isAtBoundary() || !finder.boundaryReasons().testFlag(QTextBoundaryFinder::StartWord)) {
+                if (!finder.isAtBoundary() || !finder.boundaryReasons().testFlag(BOUNDARY_REASON_START)) {
                     pos += user.length();
                     continue;
                 }
 
                 finder.setPosition(pos + user.length());
-                if (!finder.isAtBoundary() || !finder.boundaryReasons().testFlag(QTextBoundaryFinder::EndWord)) {
+                if (!finder.isAtBoundary() || !finder.boundaryReasons().testFlag(BOUNDARY_REASON_END)) {
                     pos += user.length();
                     continue;
                 }

@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2008-2012 J-P Nurmi <jpnurmi@gmail.com>
+* Copyright (C) 2008-2013 J-P Nurmi <jpnurmi@gmail.com>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -72,6 +72,8 @@ public:
     Q_INVOKABLE QString formatMessage(IrcMessage* message, UserModel* userModel = 0) const;
     Q_INVOKABLE QString formatMessage(const QString& message) const;
 
+    Q_INVOKABLE QString formatHtml(const QString& message) const;
+
 protected:
     QString formatInviteMessage(IrcInviteMessage* message) const;
     QString formatJoinMessage(IrcJoinMessage* message) const;
@@ -93,8 +95,6 @@ protected:
     static QString formatUser(const QString& user, bool strip = true);
 
     static QString formatIdleTime(int secs);
-
-    QString formatHtml(const QString& message) const;
 
 private:
     mutable struct Private {
