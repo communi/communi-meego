@@ -31,13 +31,7 @@
 #include "session.h"
 #include "settings.h"
 
-#ifdef COMMUNI_STATIC_ICU_PLUGIN
-    Q_IMPORT_PLUGIN(icuplugin)
-#endif
-
-#ifdef COMMUNI_STATIC_UCHARDET_PLUGIN
-    Q_IMPORT_PLUGIN(uchardetplugin)
-#endif
+Q_IMPORT_PLUGIN(icuplugin)
 
 #define STRINGIFY(x) XSTRINGIFY(x)
 #define XSTRINGIFY(x) #x

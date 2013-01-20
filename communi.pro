@@ -62,7 +62,13 @@ SOURCES += usermodel.cpp
 # Communi
 QT += network
 CONFIG += communi
-QMAKE_RPATHDIR += /opt/communi/lib
+
+TEMPLATE = fakelib
+LIBS += -L/usr/lib/qt4/plugins/communi -l$$qtLibraryTarget(icuplugin)
+TEMPLATE = app
+
+CONFIG += link_pkgconfig
+PKGCONFIG += icu
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
