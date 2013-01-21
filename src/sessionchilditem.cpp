@@ -18,7 +18,7 @@
 #include "usermodel.h"
 #include "session.h"
 #include <QDateTime>
-#include <ircutil.h>
+#include <irctextformat.h>
 #include <irc.h>
 
 SessionChildItem::SessionChildItem(SessionItem* parent) :
@@ -101,13 +101,13 @@ void SessionChildItem::receiveMessage(IrcMessage* message)
             case Irc::RPL_TOPIC:
                 if (isChannel()) {
                     setSubtitle(message->parameters().value(2));
-                    setDescription(IrcUtil::messageToHtml(subtitle()));
+                    setDescription(IrcTextFormat().messageToHtml(subtitle()));
                 }
                 break;
             case Irc::RPL_WHOISUSER:
                 if (!isChannel()) {
                     setSubtitle(message->parameters().value(5));
-                    setDescription(IrcUtil::messageToHtml(subtitle()));
+                    setDescription(IrcTextFormat().messageToHtml(subtitle()));
                 }
                 if (m_sent.contains(IrcCommand::Whois)) {
                     m_whois.append(tr("Ident: %1").arg(message->parameters().value(2)));

@@ -15,7 +15,6 @@
 #include <QApplication>
 #include "qmlapplicationviewer.h"
 
-#include <QtPlugin>
 #include <QtDeclarative>
 #include <IrcSession>
 #include <IrcCommand>
@@ -30,8 +29,6 @@
 #include "sessionitem.h"
 #include "session.h"
 #include "settings.h"
-
-Q_IMPORT_PLUGIN(icuplugin)
 
 #define STRINGIFY(x) XSTRINGIFY(x)
 #define XSTRINGIFY(x) #x
@@ -76,12 +73,6 @@ Q_DECL_EXPORT int main(int argc, char* argv[])
                       .arg(QApplication::applicationVersion())
                       .arg(STRINGIFY(COMMUNI_PLATFORM));
     viewer->rootContext()->setContextProperty("ApplicationName", appName);
-#ifdef COMMUNI_IMPORT_PATH
-    viewer->engine()->addImportPath(STRINGIFY(COMMUNI_IMPORT_PATH));
-#endif
-#ifdef COMMUNI_PLUGIN_PATH
-    QCoreApplication::addLibraryPath(STRINGIFY(COMMUNI_PLUGIN_PATH));
-#endif
 
     qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
     qmlRegisterType<IrcCommand>("Communi", 1, 0, "IrcCommand");
