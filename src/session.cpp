@@ -281,6 +281,12 @@ bool Session::ensureNetwork()
 
 bool Session::sendUiCommand(IrcCommand* command)
 {
+    if (command->type() == IrcCommand::Message || command->type() == IrcCommand::CtcpAction) {
+        IrcMessage* message = IrcMessage::fromCommand(nickName(), command, this);
+        emit messageReceived(message);
+        message->deleteLater();
+    }
+
     if (command->type() == IrcCommand::Join) {
         QString key = command->parameters().value(1);
         if (!key.isEmpty())

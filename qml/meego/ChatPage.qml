@@ -25,20 +25,8 @@ CommonPage {
 
     function sendMessage(receiver, message) {
         var cmd = CommandParser.parseCommand(receiver, message);
-        if (cmd && modelData) {
+        if (cmd && modelData)
             modelData.session.sendUiCommand(cmd);
-            if (cmd.type == IrcCommand.Message || cmd.type == IrcCommand.CtcpAction) {
-                var msg = ircMessage.fromCommand(modelData.session.nickName, cmd);
-                modelData.receiveMessage(msg);
-                msg.destroy();
-            }
-        }
-    }
-
-    // TODO: how to make it possible to access both Message.Type and
-    //       Message.fromCommand() without creating a dummy instance?
-    IrcMessage {
-        id: ircMessage
     }
 
     header: Header {
