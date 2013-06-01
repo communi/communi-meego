@@ -1,0 +1,33 @@
+DEPENDPATH += $$PWD
+INCLUDEPATH += $$PWD
+
+HEADERS += $$PWD/abstractsessionitem.h
+HEADERS += $$PWD/channelinfo.h
+HEADERS += $$PWD/commandparser.h
+HEADERS += $$PWD/completer.h
+HEADERS += $$PWD/connectioninfo.h
+HEADERS += $$PWD/messageformatter.h
+HEADERS += $$PWD/messagehandler.h
+HEADERS += $$PWD/messagereceiver.h
+HEADERS += $$PWD/session.h
+HEADERS += $$PWD/sessionchilditem.h
+HEADERS += $$PWD/sessionitem.h
+HEADERS += $$PWD/sessionmanager.h
+HEADERS += $$PWD/settings.h
+HEADERS += $$PWD/sortedusermodel.h
+HEADERS += $$PWD/streamer.h
+HEADERS += $$PWD/usermodel.h
+
+SOURCES += $$PWD/abstractsessionitem.cpp
+SOURCES += $$PWD/commandparser.cpp
+SOURCES += $$PWD/completer.cpp
+SOURCES += $$PWD/main.cpp
+SOURCES += $$PWD/messageformatter.cpp
+SOURCES += $$PWD/messagehandler.cpp
+SOURCES += $$PWD/session.cpp
+SOURCES += $$PWD/sessionchilditem.cpp
+SOURCES += $$PWD/sessionitem.cpp
+SOURCES += $$PWD/sessionmanager.cpp
+SOURCES += $$PWD/settings.cpp
+SOURCES += $$PWD/sortedusermodel.cpp
+SOURCES += $$PWD/usermodel.cpp

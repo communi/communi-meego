@@ -22,40 +22,7 @@ TARGET = communi
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
 # CONFIG += qdeclarative-boostable
 
-INCLUDEPATH += src
-DEPENDPATH += src
-
-# Sources
-HEADERS += abstractsessionitem.h
-HEADERS += channelinfo.h
-HEADERS += commandparser.h
-HEADERS += completer.h
-HEADERS += connectioninfo.h
-HEADERS += messageformatter.h
-HEADERS += messagehandler.h
-HEADERS += messagereceiver.h
-HEADERS += session.h
-HEADERS += sessionchilditem.h
-HEADERS += sessionitem.h
-HEADERS += sessionmanager.h
-HEADERS += settings.h
-HEADERS += sortedusermodel.h
-HEADERS += streamer.h
-HEADERS += usermodel.h
-
-SOURCES += abstractsessionitem.cpp
-SOURCES += commandparser.cpp
-SOURCES += completer.cpp
-SOURCES += main.cpp
-SOURCES += messageformatter.cpp
-SOURCES += messagehandler.cpp
-SOURCES += session.cpp
-SOURCES += sessionchilditem.cpp
-SOURCES += sessionitem.cpp
-SOURCES += sessionmanager.cpp
-SOURCES += settings.cpp
-SOURCES += sortedusermodel.cpp
-SOURCES += usermodel.cpp
+include(src/src.pri)
 
 # Communi
 QT += network
@@ -90,5 +57,3 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog
-
-
