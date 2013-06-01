@@ -23,8 +23,6 @@ TARGET = communi
 # CONFIG += qdeclarative-boostable
 
 QT += network
-PKGCONFIG += icu
-CONFIG += icu link_pkgconfig
 
 include(src/src.pri)
 include(src/libcommuni/src/src.pri)
