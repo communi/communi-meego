@@ -162,7 +162,7 @@ QString MessageFormatter::formatMessage(IrcMessage* message, UserModel* userMode
             formatted = formatInviteMessage(static_cast<IrcInviteMessage*>(message));
             break;
         case IrcMessage::Join:
-            if (message->isOwn())
+            if (message->flags() & IrcMessage::Own)
                 d.receivedCodes.clear();
             formatted = formatJoinMessage(static_cast<IrcJoinMessage*>(message));
             break;
@@ -483,7 +483,7 @@ QString MessageFormatter::formatIdleTime(int secs)
 
 QString MessageFormatter::formatHtml(const QString& message) const
 {
-    QString msg = IRC_TEXT_FORMAT.messageToHtml(message);
+    QString msg = IRC_TEXT_FORMAT.toHtml(message);
     if (d.userModel) {
         foreach (const QString& user, d.userModel->users()) {
             int pos = 0;

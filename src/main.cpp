@@ -76,8 +76,8 @@ Q_DECL_EXPORT int main(int argc, char* argv[])
 
     qmlRegisterType<IrcSession>("Communi", 1, 0, "IrcSession");
     qmlRegisterType<IrcCommand>("Communi", 1, 0, "IrcCommand");
-    qmlRegisterType<IrcMessage>("Communi", 1, 0, "IrcMessage");
     qmlRegisterUncreatableType<Irc>("Communi", 1, 0, "Irc", "");
+    qmlRegisterUncreatableType<IrcMessage>("Communi", 1, 0, "IrcMessage", "");
     qmlRegisterType<MessageFormatter>("Communi", 1, 0, "MessageFormatter");
     qmlRegisterType<MessageHandler>("Communi", 1, 0, "MessageHandler");
 

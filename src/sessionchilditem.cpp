@@ -101,13 +101,13 @@ void SessionChildItem::receiveMessage(IrcMessage* message)
             case Irc::RPL_TOPIC:
                 if (isChannel()) {
                     setSubtitle(message->parameters().value(2));
-                    setDescription(IrcTextFormat().messageToHtml(subtitle()));
+                    setDescription(IrcTextFormat().toHtml(subtitle()));
                 }
                 break;
             case Irc::RPL_WHOISUSER:
                 if (!isChannel()) {
                     setSubtitle(message->parameters().value(5));
-                    setDescription(IrcTextFormat().messageToHtml(subtitle()));
+                    setDescription(IrcTextFormat().toHtml(subtitle()));
                 }
                 if (m_sent.contains(IrcCommand::Whois)) {
                     m_whois.append(tr("Ident: %1").arg(message->parameters().value(2)));

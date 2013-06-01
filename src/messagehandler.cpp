@@ -263,7 +263,7 @@ void MessageHandler::handleNumericMessage(IrcNumericMessage* message)
 
 void MessageHandler::handlePartMessage(IrcPartMessage* message)
 {
-    if (message->isOwn())
+    if (message->flags() & IrcMessage::Own)
         removeReceiver(message->channel());
     else
         sendMessage(message, message->channel());

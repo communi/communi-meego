@@ -22,14 +22,12 @@ TARGET = communi
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
 # CONFIG += qdeclarative-boostable
 
-include(src/src.pri)
-
-# Communi
 QT += network
-CONFIG += communi
-
-CONFIG += link_pkgconfig
 PKGCONFIG += icu
+CONFIG += icu link_pkgconfig
+
+include(src/src.pri)
+include(src/libcommuni/src/src.pri)
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
